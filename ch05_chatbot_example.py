@@ -57,8 +57,12 @@ def return_answer_candidate(df, query):
     top_three_doc = df.sort_values("similarity", ascending=False).head(3)
     return top_three_doc
 
-def create_prompt(df, query):
-    result = return_answer_candidate(df, query)
+docs = []
+    for i in range(3):
+        if i < len(result):
+            docs.append(f"doc {i+1} : {result.iloc[i]['text']}")
+        else:
+            docs.append(f"doc {i+1} : (문서 없음)")
     system_role = f"""You are an artificial intelligence language model named "채티" that specializes in summarizing \
     and answering documents about Seoul's youth policy, developed by developers 황규민
     You need to take a given document and return a very detailed summary of the document in the query language.
@@ -106,3 +110,4 @@ if st.session_state['generated']:
     for i in reversed(range(len(st.session_state['generated']))):
         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
         message(st.session_state['generated'][i], key=str(i))
+
